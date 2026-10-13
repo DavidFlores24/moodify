@@ -4,8 +4,6 @@ import { getSpotifySession } from "./session";
 export async function getValidAccessToken() {
     const session = await getSpotifySession();
 
-    console.log(session)
-
     if (!session.refreshToken || !session.accessToken) {
         throw new Error("Spotify connection required");
     }

@@ -9,9 +9,13 @@ export interface SpotifySession {
     oauthState?: string;
 }
 
+if (!process.env.SESSION_PASSWORD) {
+    throw new Error("Missing Password");
+}
+
 const options: SessionOptions = {
     cookieName: "moodify_session",
-    password: process.env.SESSION_PASSWORD!,
+    password: process.env.SESSION_PASSWORD,
     cookieOptions: {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",

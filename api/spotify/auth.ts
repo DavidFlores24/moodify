@@ -13,9 +13,7 @@ function requiredEnv(name: string) {
 
 export async function beginSpotifyLogin() {
     const session = await getSpotifySession();
-    console.log("Got session");
     const state = randomBytes(32).toString("hex");
-    console.log(state);
 
     session.oauthState = state;
     await session.save();

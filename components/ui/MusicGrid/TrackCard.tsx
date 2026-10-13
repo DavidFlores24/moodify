@@ -16,7 +16,7 @@ export function TrackCard({ track, rank }: Props) {
             {rank !== undefined && (
                 <span className="w-5 shrink-0 text-sm text-muted">
           {rank}
-        </span>
+                </span>
             )}
 
             {artwork ? (
@@ -25,6 +25,8 @@ export function TrackCard({ track, rank }: Props) {
                     alt=""
                     className="h-16 w-16 shrink-0 rounded-xl object-cover"
                     loading="lazy"
+                    width={100}
+                    height={100}
                 />
             ) : (
                 <div

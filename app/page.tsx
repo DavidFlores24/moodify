@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {MoodSelector} from "@/components/ui/MoodSelector";
 import {TimeframeSelector} from "@/components/ui/TimeFrameSelector";
 import {Button} from "@/components/ui/button";
@@ -14,7 +14,11 @@ export default function DashboardPage() {
     const [timeframe, setTimeframe] =
         useState<TimeRange>(TimeRange.SHORT_TERM);
 
+    console.log("Log before hook");
+
     const { tracks, loading, error } = useTopTracks(timeframe);
+
+    console.log("Log after hook");
 
     return (
         <main className="mx-auto max-w-7xl space-y-10 px-5 py-10 md:px-8">
@@ -61,7 +65,7 @@ export default function DashboardPage() {
 
                 {error && <p role="alert">{error}</p>}
 
-                {!loading && !error && !tracks.map((track, index) => (
+                {!loading && !error && tracks.map((track, index) => (
                     <TrackCard
                         track={track}
                         key={track.id}

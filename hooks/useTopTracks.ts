@@ -9,6 +9,11 @@ type Result = {
 };
 
 export function useTopTracks(timeframe: TimeRange) {
+    console.log(
+        typeof window === "undefined"
+            ? "[useTopTracks] SERVER"
+            : "[useTopTracks] BROWSER"
+    );
     const [tracks, setTracks] = useState<Track[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -21,6 +26,7 @@ export function useTopTracks(timeframe: TimeRange) {
             setError(null);
 
             try {
+                console.log('fetching tracks...');
                 const response = await fetch(
                     `/api/spotify/top-tracks?time_range=${timeframe}`,
                     { signal: controller.signal }

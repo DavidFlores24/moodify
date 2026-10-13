@@ -10,18 +10,19 @@ export async function GET(request: NextRequest) {
 
     const session = await getSpotifySession();
 
+    const appUrl =
+        process.env.NODE_ENV === "development"
+            ? "http://127.0.0.1:3000"
+            : new URL(request.url).origin;
+
     if (error) {
         console.log("error authenticating");
         delete session.oauthState;
         await session.save();
         return NextResponse.redirect(
-            new URL("/?spotify_error=access_denied", request.url)
+            new URL("/?spotify_error=access_denied", appUrl)
         );
     }
-
-    console.log("code: ", code);
-    console.log("state: ", state);
-    console.log(session.oauthState);
 
     if (
         !code ||
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest) {
         state !== session.oauthState
     ) {
         return NextResponse.redirect(
-            new URL("/?spotify_error=invalid_state", request.url)
+            new URL("/?spotify_error=invalid_state", appUrl)
         );
     }
 
@@ -38,11 +39,18 @@ export async function GET(request: NextRequest) {
         await exchangeCode(code);
 
         return NextResponse.redirect(
-            new URL("/?connected=true", request.url)
+            new URL("/?connected=true", appUrl)
         );
-    } catch {
+    } catch (error) {
+        console.error(
+            "Spotify callback failed:",
+            error instanceof Error
+                ? error.message
+                : "Unknown error"
+        );
+
         return NextResponse.redirect(
-            new URL("/?spotify_error=connection_failed", request.url)
+            new URL("/?spotify_error=connection_failed", appUrl)
         );
     }
 }
